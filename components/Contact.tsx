@@ -47,9 +47,9 @@ export default function Contact() {
   ]
 
   const socialLinks = [
-    { icon: <FiTwitter />, url: '#', label: 'Twitter', color: 'hover:text-blue-400' },
-    { icon: <FiGithub />, url: '#', label: 'GitHub', color: 'hover:text-gray-400' },
-    { icon: <FiLinkedin />, url: '#', label: 'LinkedIn', color: 'hover:text-blue-600' },
+    { icon: <FiTwitter />, url: 'https://x.com/Durai4444', label: 'Twitter', color: 'hover:text-blue-400' },
+    { icon: <FiGithub />, url: 'https://github.com/DD4universe', label: 'GitHub', color: 'hover:text-gray-400' },
+    { icon: <FiLinkedin />, url: 'https://www.linkedin.com/in/durai-b-473058323/', label: 'LinkedIn', color: 'hover:text-blue-600' },
   ]
 
   return (

@@ -9,19 +9,8 @@ export default function Products() {
 
   const products = [
     {
-      name: 'Helpio4 — Digital Health Ecosystem',
-      description: 'Voice-enabled AI assistant with Firebase backend for doctor/patient/shop workflows, secure verification and realtime communication.',
-      price: 'Custom',
-      originalPrice: '',
-      rating: 4.9,
-      reviews: 312,
-      image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&q=80',
-      badge: 'Product',
-      color: 'from-indigo-500 to-blue-500',
-    },
-    {
-      name: 'Industrial IoT Suite',
-      description: 'Smart IoT Industry Ecosystem for real-time monitoring, predictive maintenance and energy optimization.',
+      name: 'Smart IoT Industry Ecosystem',
+      description: 'Connected industrial IoT environment for real-time monitoring, predictive maintenance and energy optimization.',
       price: 'Enterprise',
       originalPrice: '',
       rating: 4.8,
@@ -84,28 +73,6 @@ export default function Products() {
       image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=1200&q=80',
       badge: 'Gadget',
       color: 'from-yellow-400 to-orange-500',
-    },
-    {
-      name: 'Billing System (Java)',
-      description: 'Java billing application with invoice automation, product tracking and secure storage.',
-      price: 'Custom',
-      originalPrice: '',
-      rating: 4.6,
-      reviews: 74,
-      image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80',
-      badge: 'Software',
-      color: 'from-gray-500 to-gray-700',
-    },
-    {
-      name: 'Responsive Portfolio Website',
-      description: 'Ready-to-deploy responsive portfolio (React + Next.js + TypeScript) with animations.',
-      price: '$79',
-      originalPrice: '$149',
-      rating: 4.9,
-      reviews: 120,
-      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80',
-      badge: 'Website',
-      color: 'from-pink-500 to-rose-500',
     },
   ]
 

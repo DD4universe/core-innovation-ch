@@ -137,6 +137,10 @@ export default function Hero() {
             transition={{ delay: 0.8 }}
           >
             <motion.button
+              onClick={() => {
+                const element = document.getElementById('projects')
+                element?.scrollIntoView({ behavior: 'smooth' })
+              }}
               whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(99, 102, 241, 0.8)' }}
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 bg-gradient-to-r from-primary via-secondary to-accent rounded-full text-lg font-semibold glow-strong hover:animate-pulse"
@@ -145,6 +149,10 @@ export default function Hero() {
             </motion.button>
 
             <motion.button
+              onClick={() => {
+                const element = document.getElementById('products')
+                element?.scrollIntoView({ behavior: 'smooth' })
+              }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 border-2 border-primary rounded-full text-lg font-semibold hover:bg-primary/10 transition-colors"
