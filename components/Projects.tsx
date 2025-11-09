@@ -8,7 +8,7 @@ export default function Projects() {
     {
       title: 'Helpio4 — Digital Health Ecosystem',
       description: 'A voice-enabled AI assistant connecting doctors, patients and medical shops. Firebase-powered backend for secure verification, data intelligence and communication flow.',
-      image: 'https://images.unsplash.com/photo-1586773860416-70f0f1f1b0b8?w=1200&q=80',
+      image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&q=80',
       tags: ['Voice AI', 'Firebase', 'Healthcare', 'Realtime'],
       github: '#',
       demo: '#',
@@ -80,7 +80,7 @@ export default function Projects() {
     {
       title: 'IoT Smart Night Lamp',
       description: 'Smart night lamp with IoT controls, ambient sensing and customizable scenes via mobile/web app.',
-      image: 'https://images.unsplash.com/photo-1505691723518-36a56a7f2f8f?w=1200&q=80',
+      image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=1200&q=80',
       tags: ['IoT', 'Lighting', 'Mobile', 'Embedded'],
       github: '#',
       demo: '#',
