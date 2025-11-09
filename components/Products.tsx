@@ -37,7 +37,7 @@ export default function Products() {
       originalPrice: '$399',
       rating: 4.7,
       reviews: 142,
-      image: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=1200&q=80',
+      image: 'https://images.unsplash.com/photo-1562095241-8c6714fd4178?w=1200&q=80',
       badge: 'Hardware',
       color: 'from-purple-500 to-pink-500',
     },
