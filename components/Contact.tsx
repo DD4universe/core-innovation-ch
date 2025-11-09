@@ -29,19 +29,19 @@ export default function Contact() {
     {
       icon: <FiMail className="text-2xl" />,
       title: 'Email',
-      value: 'durai@innovation.com',
+      value: 'itsdurai4@gmail.com',
       color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: <FiPhone className="text-2xl" />,
       title: 'Phone',
-      value: '+1 (555) 123-4567',
+      value: '+91 6369704741',
       color: 'from-green-500 to-emerald-500',
     },
     {
       icon: <FiMapPin className="text-2xl" />,
       title: 'Location',
-      value: 'San Francisco, CA',
+      value: 'KSRCE, Namakkal, Tamil Nadu',
       color: 'from-purple-500 to-pink-500',
     },
   ]
