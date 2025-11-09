@@ -3,11 +3,15 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiShoppingCart, FiStar, FiHeart, FiZap, FiX } from 'react-icons/fi'
 import { useState } from 'react'
+import jsPDF from 'jspdf'
+import emailjs from '@emailjs/browser'
 
 export default function Products() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [showModal, setShowModal] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<string>('')
+  const [selectedProductPrice, setSelectedProductPrice] = useState<string>('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,30 +23,147 @@ export default function Products() {
     quantity: '1',
   })
 
-  const handleAddToCart = (productName: string) => {
+  const handleAddToCart = (productName: string, productPrice: string) => {
     setSelectedProduct(productName)
+    setSelectedProductPrice(productPrice)
     setShowModal(true)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const generatePDF = () => {
+    const doc = new jsPDF()
+    const currentDate = new Date().toLocaleDateString('en-IN')
+    const orderNumber = `ORD-${Date.now()}`
+
+    // Header with company info
+    doc.setFillColor(99, 102, 241)
+    doc.rect(0, 0, 210, 40, 'F')
+    doc.setTextColor(255, 255, 255)
+    doc.setFontSize(24)
+    doc.text('CORE INNOVATION', 105, 15, { align: 'center' })
+    doc.setFontSize(10)
+    doc.text('KSRCE, Namakkal, Tamil Nadu', 105, 23, { align: 'center' })
+    doc.text('Email: itsdurai4@gmail.com | Phone: +91 6369704741', 105, 30, { align: 'center' })
+
+    // Order title
+    doc.setTextColor(0, 0, 0)
+    doc.setFontSize(18)
+    doc.text('ORDER CONFIRMATION', 105, 55, { align: 'center' })
+
+    // Order details
+    doc.setFontSize(10)
+    doc.text(`Order Number: ${orderNumber}`, 20, 70)
+    doc.text(`Date: ${currentDate}`, 20, 77)
+
+    // Product details
+    doc.setFontSize(14)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Product Details:', 20, 92)
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(11)
+    doc.text(`Product: ${selectedProduct}`, 20, 102)
+    doc.text(`Price: ${selectedProductPrice}`, 20, 110)
+    doc.text(`Quantity: ${formData.quantity}`, 20, 118)
+    
+    // Calculate total
+    const priceNum = parseFloat(selectedProductPrice.replace(/[₹,]/g, ''))
+    const total = priceNum * parseInt(formData.quantity)
+    doc.setFont('helvetica', 'bold')
+    doc.text(`Total Amount: ₹${total.toLocaleString('en-IN')}`, 20, 126)
+
+    // Customer details
+    doc.setFontSize(14)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Customer Details:', 20, 145)
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(11)
+    doc.text(`Name: ${formData.name}`, 20, 155)
+    doc.text(`Email: ${formData.email}`, 20, 163)
+    doc.text(`Phone: ${formData.phone}`, 20, 171)
+    
+    // Delivery address
+    doc.setFont('helvetica', 'bold')
+    doc.text('Delivery Address:', 20, 185)
+    doc.setFont('helvetica', 'normal')
+    doc.text(`${formData.address}`, 20, 195)
+    doc.text(`${formData.city}, ${formData.state} - ${formData.pincode}`, 20, 203)
+
+    // Footer
+    doc.setFillColor(99, 102, 241)
+    doc.rect(0, 270, 210, 27, 'F')
+    doc.setTextColor(255, 255, 255)
+    doc.setFontSize(9)
+    doc.text('Thank you for your order! We will contact you shortly.', 105, 282, { align: 'center' })
+    doc.text('For any queries, contact us at itsdurai4@gmail.com', 105, 289, { align: 'center' })
+
+    return doc
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Here you can add logic to send the order to your backend
-    console.log('Order Details:', {
-      product: selectedProduct,
-      ...formData,
-    })
-    alert(`Thank you! Your order for ${selectedProduct} has been received. We will contact you soon!`)
-    setShowModal(false)
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-      city: '',
-      state: '',
-      pincode: '',
-      quantity: '1',
-    })
+    setIsSubmitting(true)
+
+    try {
+      // Generate PDF
+      const pdf = generatePDF()
+      const pdfBlob = pdf.output('blob')
+      const pdfBase64 = pdf.output('dataurlstring').split(',')[1]
+
+      // Initialize EmailJS (you'll need to replace these with your actual credentials)
+      // Sign up at https://www.emailjs.com/ to get these
+      emailjs.init('YOUR_PUBLIC_KEY') // Replace with your EmailJS public key
+
+      // Prepare email parameters
+      const emailParams = {
+        to_email: 'itsdurai4@gmail.com', // Your email
+        customer_email: formData.email, // Customer's email
+        customer_name: formData.name,
+        product_name: selectedProduct,
+        product_price: selectedProductPrice,
+        quantity: formData.quantity,
+        order_number: `ORD-${Date.now()}`,
+        phone: formData.phone,
+        address: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
+        pdf_attachment: pdfBase64,
+      }
+
+      // Send email to your address
+      await emailjs.send(
+        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        emailParams
+      )
+
+      // Also send to customer
+      await emailjs.send(
+        'YOUR_SERVICE_ID',
+        'YOUR_CUSTOMER_TEMPLATE_ID', // Create a separate template for customer
+        {
+          ...emailParams,
+          to_email: formData.email,
+        }
+      )
+
+      // Download PDF for customer
+      pdf.save(`Order-${selectedProduct.replace(/\s+/g, '-')}-${Date.now()}.pdf`)
+
+      alert(`Thank you ${formData.name}! Your order for ${selectedProduct} has been confirmed. Order details have been sent to your email.`)
+      setShowModal(false)
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        city: '',
+        state: '',
+        pincode: '',
+        quantity: '1',
+      })
+    } catch (error) {
+      console.error('Error sending order:', error)
+      alert('There was an error processing your order. Please try again or contact us directly.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -243,7 +364,7 @@ export default function Products() {
 
                   {/* CTA */}
                   <motion.button
-                    onClick={() => handleAddToCart(product.name)}
+                    onClick={() => handleAddToCart(product.name, product.price)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full py-3 bg-gradient-to-r from-primary via-secondary to-accent rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/50 transition-all"
@@ -431,12 +552,13 @@ export default function Products() {
                 {/* Submit Button */}
                 <motion.button
                   type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-4 bg-gradient-to-r from-primary via-secondary to-accent rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/50 transition-all text-lg glow-strong"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                  className={`w-full py-4 bg-gradient-to-r from-primary via-secondary to-accent rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/50 transition-all text-lg glow-strong ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
-                  <FiShoppingCart />
-                  Place Order
+                  <FiShoppingCart className={isSubmitting ? 'animate-pulse' : ''} />
+                  {isSubmitting ? 'Processing Order...' : 'Place Order'}
                 </motion.button>
               </form>
 
