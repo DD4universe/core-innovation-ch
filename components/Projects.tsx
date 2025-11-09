@@ -26,7 +26,7 @@ export default function Projects() {
     {
       title: 'IoT Smart Lift Guard',
       description: 'Wi‑Fi enabled lift access system using ESP32 portal and password-gated activation for secure, wireless access control.',
-      image: 'https://images.unsplash.com/photo-1562095241-8c6714fd4178?w=1200&q=80',
+      image: 'https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=1200&q=80',
       tags: ['ESP32', 'WiFi', 'Access Control', 'Embedded'],
       github: '#',
       demo: '#',
