@@ -104,9 +104,9 @@ export default function About() {
           className="grid grid-cols-2 md:grid-cols-4 gap-6"
         >
           {[
-            { number: '50+', label: 'Projects Completed' },
+            { number: '3+', label: 'Projects Completed' },
             { number: '100%', label: 'Client Satisfaction' },
-            { number: '5+', label: 'Years Experience' },
+            { number: '1+', label: 'Years Experience' },
             { number: '24/7', label: 'Support Available' },
           ].map((stat, index) => (
             <motion.div
