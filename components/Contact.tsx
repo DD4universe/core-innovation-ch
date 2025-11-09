@@ -86,7 +86,7 @@ export default function Contact() {
             Get In <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Touch</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Let's discuss your next project and bring your ideas to life
+            Let&apos;s discuss your next project and bring your ideas to life
           </p>
         </motion.div>
 
