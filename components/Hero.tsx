@@ -1,17 +1,49 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import Card3D from './Card3D'
+import GlassMorph from './GlassMorph'
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [showContent, setShowContent] = useState(false)
+  const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 })
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  // Smooth mouse tracking
+  const springConfig = { damping: 25, stiffness: 150 }
+  const smoothMouseX = useSpring(mouseX, springConfig)
+  const smoothMouseY = useSpring(mouseY, springConfig)
+
+  // Parallax effect
+  const x1 = useTransform(smoothMouseX, [0, dimensions.width], [-50, 50])
+  const y1 = useTransform(smoothMouseY, [0, dimensions.height], [-50, 50])
+  const x2 = useTransform(smoothMouseX, [0, dimensions.width], [-25, 25])
+  const y2 = useTransform(smoothMouseY, [0, dimensions.height], [-25, 25])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setDimensions({ width: window.innerWidth, height: window.innerHeight })
+      const handleResize = () => {
+        setDimensions({ width: window.innerWidth, height: window.innerHeight })
+      }
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   useEffect(() => {
     // Startup animation delay
     const timer = setTimeout(() => setShowContent(true), 500)
     return () => clearTimeout(timer)
   }, [])
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    mouseX.set(e.clientX)
+    mouseY.set(e.clientY)
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -95,14 +127,54 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Video */}
+    <section 
+      id="home" 
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      onMouseMove={handleMouseMove}
+    >
+      {/* Advanced Background with Parallax */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/30 to-cyan-900/30 animate-gradient-x"></div>
-        <div className="absolute inset-0">
+        {/* Layer 1: Deep Background */}
+        <motion.div 
+          className="absolute inset-0"
+          style={{ x: x1, y: y1 }}
+        >
+          {[...Array(15)].map((_, i) => (
+            <motion.div
+              key={`layer1-${i}`}
+              className="absolute rounded-full blur-3xl"
+              style={{
+                width: Math.random() * 400 + 200,
+                height: Math.random() * 400 + 200,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                background: `radial-gradient(circle, ${
+                  ['rgba(99,102,241,0.4)', 'rgba(139,92,246,0.4)', 'rgba(34,211,238,0.4)'][i % 3]
+                } 0%, transparent 70%)`,
+              }}
+              animate={{
+                x: [0, Math.random() * 100 - 50, 0],
+                y: [0, Math.random() * 100 - 50, 0],
+                scale: [1, 1.3, 1],
+              }}
+              transition={{
+                duration: Math.random() * 15 + 10,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </motion.div>
+
+        {/* Layer 2: Mid Ground with Parallax */}
+        <motion.div 
+          className="absolute inset-0"
+          style={{ x: x2, y: y2 }}
+        >
           {[...Array(20)].map((_, i) => (
             <motion.div
-              key={i}
+              key={`layer2-${i}`}
               className="absolute rounded-full bg-gradient-to-r from-primary/20 to-accent/20 blur-xl"
               style={{
                 width: Math.random() * 300 + 100,
@@ -115,11 +187,38 @@ export default function Hero() {
                 y: [0, Math.random() * 100 - 50, 0],
                 scale: [1, 1.2, 1],
                 opacity: [0.3, 0.6, 0.3],
+                rotate: [0, 180, 360],
               }}
               transition={{
                 duration: Math.random() * 10 + 10,
                 repeat: Infinity,
                 ease: "easeInOut",
+              }}
+            />
+          ))}
+        </motion.div>
+
+        {/* Layer 3: Foreground Particles */}
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <motion.div
+              key={`particle-${i}`}
+              className="absolute w-1 h-1 bg-white rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                boxShadow: '0 0 10px 2px rgba(255,255,255,0.5)',
+              }}
+              animate={{
+                opacity: [0, 1, 0],
+                scale: [0, 1.5, 0],
+                y: [0, -100],
+              }}
+              transition={{
+                duration: Math.random() * 3 + 2,
+                repeat: Infinity,
+                delay: Math.random() * 5,
+                ease: "easeOut",
               }}
             />
           ))}
@@ -170,41 +269,69 @@ export default function Hero() {
           <motion.div
             className="flex flex-col sm:flex-row gap-6 justify-center items-center"
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={showContent ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.8 }}
           >
-            <motion.button
-              onClick={() => {
-                const element = document.getElementById('projects')
-                element?.scrollIntoView({ behavior: 'smooth' })
-              }}
-              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(99, 102, 241, 0.8)' }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-gradient-to-r from-primary via-secondary to-accent rounded-full text-lg font-semibold glow-strong hover:animate-pulse"
-            >
-              Explore Projects
-            </motion.button>
+            <Card3D>
+              <motion.button
+                onClick={() => {
+                  const element = document.getElementById('projects')
+                  element?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(99, 102, 241, 0.8)' }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-gradient-to-r from-primary via-secondary to-accent rounded-full text-lg font-semibold glow-strong relative overflow-hidden"
+              >
+                <span className="relative z-10">Explore Projects</span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0"
+                  animate={{
+                    x: ['-100%', '100%'],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                />
+              </motion.button>
+            </Card3D>
 
-            <motion.button
-              onClick={() => {
-                const element = document.getElementById('products')
-                element?.scrollIntoView({ behavior: 'smooth' })
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 border-2 border-primary rounded-full text-lg font-semibold hover:bg-primary/10 transition-colors"
-            >
-              View Products
-            </motion.button>
+            <GlassMorph blur={15} opacity={0.15} className="rounded-full">
+              <motion.button
+                onClick={() => {
+                  const element = document.getElementById('products')
+                  element?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 border-2 border-white/30 rounded-full text-lg font-semibold backdrop-blur-sm"
+              >
+                View Products
+              </motion.button>
+            </GlassMorph>
 
-            <motion.a
-              href="/custom-project"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-gradient-to-r from-green-600 to-teal-600 rounded-full text-lg font-semibold hover:shadow-lg hover:shadow-green-500/50 transition-all"
-            >
-              🎯 Request Custom Project
-            </motion.a>
+            <Card3D>
+              <motion.a
+                href="/custom-project"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="block px-8 py-4 bg-gradient-to-r from-green-600 to-teal-600 rounded-full text-lg font-semibold hover:shadow-lg hover:shadow-green-500/50 transition-all relative overflow-hidden"
+              >
+                <span className="relative z-10">🎯 Request Custom Project</span>
+                <motion.div
+                  className="absolute inset-0 bg-white/20"
+                  animate={{
+                    scale: [1, 1.5],
+                    opacity: [0.5, 0],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                  }}
+                />
+              </motion.a>
+            </Card3D>
           </motion.div>
         </motion.div>
 

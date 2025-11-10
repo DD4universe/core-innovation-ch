@@ -1,6 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Card3D from './Card3D'
+import GlassMorph from './GlassMorph'
 
 export default function About() {
   const skills = [
@@ -109,25 +111,59 @@ export default function About() {
             { number: '1+', label: 'Years Experience' },
             { number: '24/7', label: 'Support Available' },
           ].map((stat, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, rotateY: 180 }}
-              whileInView={{ opacity: 1, rotateY: 0 }}
-              viewport={{ once: true }}
-              transition={{ 
-                delay: index * 0.1,
-                duration: 0.8,
-                type: "spring"
-              }}
-              whileHover={{ scale: 1.05, rotateY: 5, rotateZ: 2 }}
-              className="bg-gradient-to-br from-gray-900 to-black p-8 rounded-2xl border border-primary/20 text-center relative overflow-hidden group transform-style-3d"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-              <div className="text-4xl font-bold mb-2 glow relative z-10">
-                {stat.number}
-              </div>
-              <div className="text-gray-400 relative z-10">{stat.label}</div>
-            </motion.div>
+            <Card3D key={index} className="h-full">
+              <GlassMorph blur={20} opacity={0.1} className="h-full">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ 
+                    delay: index * 0.1,
+                    duration: 0.6,
+                    type: "spring",
+                    bounce: 0.5
+                  }}
+                  className="p-8 text-center relative overflow-hidden group h-full flex flex-col justify-center"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                  <motion.div 
+                    className="text-5xl font-bold mb-2 glow relative z-10"
+                    animate={{
+                      textShadow: [
+                        '0 0 20px rgba(99, 102, 241, 0.8)',
+                        '0 0 40px rgba(139, 92, 246, 0.8)',
+                        '0 0 20px rgba(99, 102, 241, 0.8)',
+                      ]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    {stat.number}
+                  </motion.div>
+                  <div className="text-gray-300 relative z-10 font-medium">{stat.label}</div>
+                  
+                  {/* Floating particles */}
+                  {[...Array(3)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute w-1 h-1 bg-primary rounded-full"
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                      }}
+                      animate={{
+                        y: [-20, -40],
+                        opacity: [0, 1, 0],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: i * 0.3,
+                      }}
+                    />
+                  ))}
+                </motion.div>
+              </GlassMorph>
+            </Card3D>
           ))}
         </motion.div>
       </div>
