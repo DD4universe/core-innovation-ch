@@ -111,8 +111,16 @@ export default function About() {
           ].map((stat, index) => (
             <motion.div
               key={index}
-              whileHover={{ scale: 1.05, rotate: 2 }}
-              className="bg-gradient-to-br from-gray-900 to-black p-8 rounded-2xl border border-primary/20 text-center relative overflow-hidden group"
+              initial={{ opacity: 0, rotateY: 180 }}
+              whileInView={{ opacity: 1, rotateY: 0 }}
+              viewport={{ once: true }}
+              transition={{ 
+                delay: index * 0.1,
+                duration: 0.8,
+                type: "spring"
+              }}
+              whileHover={{ scale: 1.05, rotateY: 5, rotateZ: 2 }}
+              className="bg-gradient-to-br from-gray-900 to-black p-8 rounded-2xl border border-primary/20 text-center relative overflow-hidden group transform-style-3d"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
               <div className="text-4xl font-bold mb-2 glow relative z-10">

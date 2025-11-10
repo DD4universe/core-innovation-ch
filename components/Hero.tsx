@@ -1,10 +1,17 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [showContent, setShowContent] = useState(false)
+
+  useEffect(() => {
+    // Startup animation delay
+    const timer = setTimeout(() => setShowContent(true), 500)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -89,9 +96,39 @@ export default function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/30 to-cyan-900/30 animate-gradient-x"></div>
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full bg-gradient-to-r from-primary/20 to-accent/20 blur-xl"
+              style={{
+                width: Math.random() * 300 + 100,
+                height: Math.random() * 300 + 100,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                x: [0, Math.random() * 100 - 50, 0],
+                y: [0, Math.random() * 100 - 50, 0],
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: Math.random() * 10 + 10,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-5"
       />
 
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black z-10" />
@@ -99,14 +136,14 @@ export default function Hero() {
       <div className="relative z-20 max-w-7xl mx-auto px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={showContent ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
           <motion.h1
             className="text-6xl md:text-8xl font-bold mb-6 glow"
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1, type: 'spring' }}
+            initial={{ scale: 0.5, opacity: 0, rotateY: -180 }}
+            animate={showContent ? { scale: 1, opacity: 1, rotateY: 0 } : {}}
+            transition={{ duration: 1.2, type: 'spring', bounce: 0.4 }}
           >
             <motion.span
               className="inline-block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"

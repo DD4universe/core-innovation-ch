@@ -315,17 +315,23 @@ export default function Products() {
           {products.map((product, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 50, rotateY: -90 }}
+              whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ 
+                delay: index * 0.1,
+                duration: 0.8,
+                type: "spring",
+                bounce: 0.4
+              }}
               onHoverStart={() => setHoveredIndex(index)}
               onHoverEnd={() => setHoveredIndex(null)}
-              className="group relative"
+              className="group relative perspective-1000"
             >
               <motion.div
-                whileHover={{ y: -15 }}
-                className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all h-full"
+                whileHover={{ y: -15, rotateY: 5, rotateX: 5 }}
+                transition={{ duration: 0.3 }}
+                className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all h-full transform-style-3d"
               >
                 {/* Image */}
                 <div className="relative h-56 overflow-hidden">

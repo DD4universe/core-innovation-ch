@@ -38,12 +38,71 @@ body {
     perspective: 1000px;
   }
   
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+  
   .preserve-3d {
     transform-style: preserve-3d;
   }
   
   .backface-hidden {
     backface-visibility: hidden;
+  }
+  
+  .animate-gradient-x {
+    animation: gradient-x 15s ease infinite;
+    background-size: 200% 200%;
+  }
+  
+  @keyframes gradient-x {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  .animate-float-slow {
+    animation: float-slow 8s ease-in-out infinite;
+  }
+  
+  @keyframes float-slow {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  .animate-spin-slow {
+    animation: spin-slow 20s linear infinite;
+  }
+  
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-flip-in {
+    animation: flip-in 1s ease-out;
+  }
+  
+  @keyframes flip-in {
+    from {
+      transform: rotateY(-180deg);
+      opacity: 0;
+    }
+    to {
+      transform: rotateY(0);
+      opacity: 1;
+    }
   }
 }
 

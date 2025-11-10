@@ -56,12 +56,17 @@ export default function Projects() {
           {projects.map((project, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 50, rotateX: -90 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="group relative bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all"
+              transition={{ 
+                delay: index * 0.15,
+                duration: 0.9,
+                type: "spring",
+                bounce: 0.5
+              }}
+              whileHover={{ y: -10, rotateY: 3, scale: 1.02 }}
+              className="group relative bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-primary/20 hover:border-primary/50 transition-all transform-style-3d"
             >
               {/* Image container with hover effect */}
               <div className="relative h-48 overflow-hidden">
