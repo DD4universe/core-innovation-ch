@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
 import { FiSend, FiMessageCircle, FiFileText, FiMail } from 'react-icons/fi'
 import jsPDF from 'jspdf'
-import emailjs from '@emailjs/browser'
 
 interface Message {
   id: number
@@ -360,50 +359,20 @@ export default function CustomProjectPage() {
 
     try {
       const pdf = generatePDF()
-      const pdfBase64 = pdf.output('dataurlstring').split(',')[1]
       const data = projectData as ProjectData
 
-      // Initialize EmailJS
-      emailjs.init('YOUR_PUBLIC_KEY') // Replace with your EmailJS public key
-
-      // Send to your email
-      await emailjs.send(
-        'YOUR_SERVICE_ID',
-        'YOUR_PROJECT_TEMPLATE_ID',
-        {
-          to_email: 'itsdurai4@gmail.com',
-          client_name: data.name,
-          client_email: data.email,
-          client_phone: data.phone,
-          project_type: data.projectType,
-          budget: data.budget,
-          timeline: data.timeline,
-          pdf_attachment: pdfBase64,
-        }
-      )
-
-      // Send confirmation to client
-      await emailjs.send(
-        'YOUR_SERVICE_ID',
-        'YOUR_CLIENT_CONFIRMATION_TEMPLATE_ID',
-        {
-          to_email: data.email,
-          client_name: data.name,
-          project_type: data.projectType,
-        }
-      )
-
       // Download PDF for client
-      pdf.save(`Project-Proposal-${data.name.replace(/\s+/g, '-')}.pdf`)
+      const fileName = `Project-Proposal-${data.name.replace(/\s+/g, '-')}-${Date.now()}.pdf`
+      pdf.save(fileName)
 
       addMessage(
-        `✅ Perfect! I've sent your detailed project proposal to both you (${data.email}) and Durai at itsdurai4@gmail.com.\n\n📥 A copy has also been downloaded to your device.\n\n🎯 Next Steps:\n• Durai will review your proposal within 24 hours\n• You'll receive a detailed quote and timeline\n• We'll schedule a call to discuss further\n\nThank you for trusting Core Innovation with your project! 🚀`,
+        `✅ Perfect! Your detailed project proposal has been created and downloaded!\n\n📥 PDF Downloaded: ${fileName}\n\n🎯 Next Steps:\n\n1️⃣ Email the PDF to: itsdurai4@gmail.com\n   Subject: "Custom Project Request - ${data.projectType}"\n\n2️⃣ Or send via WhatsApp: +91 6369704741\n\n3️⃣ We'll review your proposal within 24 hours\n\n4️⃣ You'll receive a detailed quote and timeline\n\n5️⃣ We'll schedule a call to discuss further\n\nYour project details:\n• Type: ${data.projectType}\n• Budget: ${data.budget}\n• Timeline: ${data.timeline}\n• Contact: ${data.email} | ${data.phone}\n\nThank you for trusting Core Innovation with your project! 🚀\n\nWe're excited to bring your vision to life! 💡`,
         'bot'
       )
     } catch (error) {
       console.error('Error:', error)
       addMessage(
-        "⚠️ Oops! There was an issue sending the email, but I've downloaded the PDF for you. Please email it manually to itsdurai4@gmail.com or contact us directly.",
+        `⚠️ Oops! There was an issue generating the PDF.\n\n📞 No worries! Please contact us directly:\n\n📧 Email: itsdurai4@gmail.com\n📱 Phone: +91 6369704741\n💬 WhatsApp: +91 6369704741\n\nPlease share these details:\n\n👤 Name: ${projectData.name}\n📧 Email: ${projectData.email}\n📱 Phone: ${projectData.phone}\n🎯 Project Type: ${projectData.projectType}\n💰 Budget: ${projectData.budget}\n⏰ Timeline: ${projectData.timeline}\n\nWe'll get back to you within 24 hours!`,
         'bot'
       )
     } finally {
