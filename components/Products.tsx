@@ -29,45 +29,46 @@ export default function Products() {
   }
 
   const generatePDF = () => {
-    const doc = new jsPDF()
-    const currentDate = new Date().toLocaleDateString('en-IN')
-    const orderNumber = `ORD-${Date.now()}`
+    try {
+      const doc = new jsPDF()
+      const currentDate = new Date().toLocaleDateString('en-IN')
+      const orderNumber = `ORD-${Date.now()}`
 
-    // Header with company info
-    doc.setFillColor(99, 102, 241)
-    doc.rect(0, 0, 210, 40, 'F')
-    doc.setTextColor(255, 255, 255)
-    doc.setFontSize(24)
-    doc.text('CORE INNOVATION', 105, 15, { align: 'center' })
-    doc.setFontSize(10)
-    doc.text('KSRCE, Namakkal, Tamil Nadu', 105, 23, { align: 'center' })
-    doc.text('Email: itsdurai4@gmail.com | Phone: +91 6369704741', 105, 30, { align: 'center' })
+      // Header with company info
+      doc.setFillColor(99, 102, 241)
+      doc.rect(0, 0, 210, 40, 'F')
+      doc.setTextColor(255, 255, 255)
+      doc.setFontSize(24)
+      doc.text('CORE INNOVATION', 105, 15, { align: 'center' })
+      doc.setFontSize(10)
+      doc.text('KSRCE, Namakkal, Tamil Nadu', 105, 23, { align: 'center' })
+      doc.text('Email: itsdurai4@gmail.com | Phone: +91 6369704741', 105, 30, { align: 'center' })
 
-    // Order title
-    doc.setTextColor(0, 0, 0)
-    doc.setFontSize(18)
-    doc.text('ORDER CONFIRMATION', 105, 55, { align: 'center' })
+      // Order title
+      doc.setTextColor(0, 0, 0)
+      doc.setFontSize(18)
+      doc.text('ORDER CONFIRMATION', 105, 55, { align: 'center' })
 
-    // Order details
-    doc.setFontSize(10)
-    doc.text(`Order Number: ${orderNumber}`, 20, 70)
-    doc.text(`Date: ${currentDate}`, 20, 77)
+      // Order details
+      doc.setFontSize(10)
+      doc.text(`Order Number: ${orderNumber}`, 20, 70)
+      doc.text(`Date: ${currentDate}`, 20, 77)
 
-    // Product details
-    doc.setFontSize(14)
-    doc.setFont('helvetica', 'bold')
-    doc.text('Product Details:', 20, 92)
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(11)
-    doc.text(`Product: ${selectedProduct}`, 20, 102)
-    doc.text(`Price: ${selectedProductPrice}`, 20, 110)
-    doc.text(`Quantity: ${formData.quantity}`, 20, 118)
-    
-    // Calculate total
-    const priceNum = parseFloat(selectedProductPrice.replace(/[₹,]/g, ''))
-    const total = priceNum * parseInt(formData.quantity)
-    doc.setFont('helvetica', 'bold')
-    doc.text(`Total Amount: ₹${total.toLocaleString('en-IN')}`, 20, 126)
+      // Product details
+      doc.setFontSize(14)
+      doc.setFont('helvetica', 'bold')
+      doc.text('Product Details:', 20, 92)
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(11)
+      doc.text(`Product: ${selectedProduct || 'N/A'}`, 20, 102)
+      doc.text(`Price: ${selectedProductPrice || 'N/A'}`, 20, 110)
+      doc.text(`Quantity: ${formData.quantity || '1'}`, 20, 118)
+      
+      // Calculate total
+      const priceNum = parseFloat((selectedProductPrice || '0').replace(/[₹,]/g, ''))
+      const total = priceNum * parseInt(formData.quantity || '1')
+      doc.setFont('helvetica', 'bold')
+      doc.text(`Total Amount: ₹${total.toLocaleString('en-IN')}`, 20, 126)
 
     // Customer details
     doc.setFontSize(14)
@@ -86,15 +87,19 @@ export default function Products() {
     doc.text(`${formData.address}`, 20, 195)
     doc.text(`${formData.city}, ${formData.state} - ${formData.pincode}`, 20, 203)
 
-    // Footer
-    doc.setFillColor(99, 102, 241)
-    doc.rect(0, 270, 210, 27, 'F')
-    doc.setTextColor(255, 255, 255)
-    doc.setFontSize(9)
-    doc.text('Thank you for your order! We will contact you shortly.', 105, 282, { align: 'center' })
-    doc.text('For any queries, contact us at itsdurai4@gmail.com', 105, 289, { align: 'center' })
+      // Footer
+      doc.setFillColor(99, 102, 241)
+      doc.rect(0, 270, 210, 27, 'F')
+      doc.setTextColor(255, 255, 255)
+      doc.setFontSize(9)
+      doc.text('Thank you for your order! We will contact you shortly.', 105, 282, { align: 'center' })
+      doc.text('For any queries, contact us at itsdurai4@gmail.com', 105, 289, { align: 'center' })
 
-    return doc
+      return doc
+    } catch (error) {
+      console.error('PDF Generation Error:', error)
+      throw error
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -136,17 +141,27 @@ export default function Products() {
       })
     } catch (error) {
       console.error('Error generating order:', error)
+      console.error('Form Data:', formData)
+      console.error('Selected Product:', selectedProduct)
+      console.error('Selected Price:', selectedProductPrice)
+      
       alert(
-        '⚠️ Sorry, there was an error generating your order slip.\n\n' +
-        'Please contact us directly:\n' +
+        '⚠️ Sorry, there was an error processing your order.\n\n' +
+        'Please contact us directly with your order details:\n\n' +
         '📧 Email: itsdurai4@gmail.com\n' +
         '📱 Phone: +91 6369704741\n' +
         '💬 WhatsApp: +91 6369704741\n\n' +
-        `Order Details:\n` +
-        `Product: ${selectedProduct}\n` +
+        `Your Order Details:\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        `Product: ${selectedProduct || 'Not selected'}\n` +
+        `Price: ${selectedProductPrice || 'Not set'}\n` +
+        `Quantity: ${formData.quantity}\n\n` +
+        `Customer Info:\n` +
         `Name: ${formData.name}\n` +
         `Email: ${formData.email}\n` +
-        `Phone: ${formData.phone}`
+        `Phone: ${formData.phone}\n` +
+        `Address: ${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}\n\n` +
+        `We'll process your order manually and contact you soon!`
       )
     } finally {
       setIsSubmitting(false)
