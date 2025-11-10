@@ -61,14 +61,16 @@ export default function Products() {
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(11)
       doc.text(`Product: ${selectedProduct || 'N/A'}`, 20, 102)
-      doc.text(`Price: ${selectedProductPrice || 'N/A'}`, 20, 110)
+      
+      // Remove rupee symbol and format price properly
+      const priceNum = parseFloat((selectedProductPrice || '0').replace(/[₹,]/g, ''))
+      doc.text(`Price: Rs. ${priceNum.toLocaleString('en-IN')}`, 20, 110)
       doc.text(`Quantity: ${formData.quantity || '1'}`, 20, 118)
       
       // Calculate total
-      const priceNum = parseFloat((selectedProductPrice || '0').replace(/[₹,]/g, ''))
       const total = priceNum * parseInt(formData.quantity || '1')
       doc.setFont('helvetica', 'bold')
-      doc.text(`Total Amount: ₹${total.toLocaleString('en-IN')}`, 20, 126)
+      doc.text(`Total Amount: Rs. ${total.toLocaleString('en-IN')}`, 20, 126)
 
     // Customer details
     doc.setFontSize(14)
