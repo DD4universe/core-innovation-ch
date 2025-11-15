@@ -223,6 +223,105 @@ export default function Hero() {
             />
           ))}
         </div>
+
+        {/* Galaxy Animation - Bottom to Top 45%, Left to Right */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`galaxy-${i}`}
+              className="absolute"
+              style={{
+                width: Math.random() * 150 + 100,
+                height: Math.random() * 150 + 100,
+                left: '0%',
+                bottom: '0%',
+              }}
+              animate={{
+                left: ['0%', '100%'],
+                bottom: ['0%', '45%'],
+                rotate: [0, 720],
+                opacity: [0, 0.8, 0.8, 0],
+              }}
+              transition={{
+                duration: Math.random() * 8 + 12,
+                repeat: Infinity,
+                delay: i * 2,
+                ease: "easeInOut",
+              }}
+            >
+              <div className="relative w-full h-full">
+                {/* Galaxy Core */}
+                <motion.div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: `radial-gradient(circle, 
+                      rgba(255,255,255,0.9) 0%,
+                      rgba(99,102,241,0.7) 20%,
+                      rgba(139,92,246,0.5) 40%,
+                      rgba(236,72,153,0.3) 60%,
+                      transparent 100%)`,
+                    boxShadow: '0 0 40px rgba(99,102,241,0.8), 0 0 80px rgba(139,92,246,0.6)',
+                  }}
+                  animate={{
+                    scale: [1, 1.3, 1],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                
+                {/* Spiral Arms */}
+                {[...Array(3)].map((_, arm) => (
+                  <motion.div
+                    key={`arm-${arm}`}
+                    className="absolute inset-0"
+                    animate={{
+                      rotate: [arm * 120, arm * 120 + 360],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  >
+                    <div 
+                      className="absolute w-full h-1 rounded-full blur-sm"
+                      style={{
+                        background: 'linear-gradient(90deg, rgba(99,102,241,0.6) 0%, rgba(139,92,246,0.4) 50%, transparent 100%)',
+                        transformOrigin: 'left center',
+                        top: '50%',
+                      }}
+                    />
+                  </motion.div>
+                ))}
+
+                {/* Stars around galaxy */}
+                {[...Array(12)].map((_, star) => (
+                  <motion.div
+                    key={`star-${star}`}
+                    className="absolute w-1 h-1 bg-white rounded-full"
+                    style={{
+                      left: `${50 + Math.cos((star * 30) * Math.PI / 180) * 40}%`,
+                      top: `${50 + Math.sin((star * 30) * Math.PI / 180) * 40}%`,
+                      boxShadow: '0 0 4px 1px rgba(255,255,255,0.8)',
+                    }}
+                    animate={{
+                      opacity: [0.3, 1, 0.3],
+                      scale: [1, 1.5, 1],
+                    }}
+                    transition={{
+                      duration: Math.random() * 2 + 1,
+                      repeat: Infinity,
+                      delay: star * 0.1,
+                    }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       <canvas
