@@ -115,7 +115,7 @@ export default function Navigation() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowContactMenu(!showContactMenu)}
-              className="px-6 py-2 bg-gradient-to-r from-primary via-secondary to-accent rounded-full font-semibold glow-strong"
+              className="px-6 py-2 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-colors"
             >
               Let&apos;s Talk
             </motion.button>
