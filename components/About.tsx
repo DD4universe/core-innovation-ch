@@ -141,8 +141,8 @@ export default function About() {
                   </motion.div>
                   <div className="text-gray-300 relative z-10 font-medium">{stat.label}</div>
                   
-                  {/* Floating particles - Reduced for performance */}
-                  {[...Array(1)].map((_, i) => (
+                  {/* Floating particles */}
+                  {[...Array(3)].map((_, i) => (
                     <motion.div
                       key={i}
                       className="absolute w-1 h-1 bg-primary rounded-full"
