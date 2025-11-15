@@ -16,9 +16,19 @@ export default function About() {
 
   return (
     <section id="about" className="min-h-screen py-20 px-6 relative overflow-hidden">
-      {/* Background gradient blobs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-slow" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse-slow" />
+      {/* Galaxy Video Background */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-20"
+        >
+          <source src="https://cdn.pixabay.com/video/2022/04/19/114761-700719864_large.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
+      </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
