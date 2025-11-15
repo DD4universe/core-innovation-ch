@@ -135,12 +135,12 @@ export default function Hero() {
       {/* Advanced Background with Parallax */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/30 to-cyan-900/30 animate-gradient-x"></div>
-        {/* Layer 1: Deep Background */}
+        {/* Layer 1: Deep Background - Reduced for performance */}
         <motion.div 
           className="absolute inset-0"
           style={{ x: x1, y: y1 }}
         >
-          {[...Array(15)].map((_, i) => (
+          {[...Array(5)].map((_, i) => (
             <motion.div
               key={`layer1-${i}`}
               className="absolute rounded-full blur-3xl"
@@ -167,12 +167,12 @@ export default function Hero() {
           ))}
         </motion.div>
 
-        {/* Layer 2: Mid Ground with Parallax */}
+        {/* Layer 2: Mid Ground with Parallax - Optimized */}
         <motion.div 
           className="absolute inset-0"
           style={{ x: x2, y: y2 }}
         >
-          {[...Array(20)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <motion.div
               key={`layer2-${i}`}
               className="absolute rounded-full bg-gradient-to-r from-primary/20 to-accent/20 blur-xl"
@@ -198,9 +198,9 @@ export default function Hero() {
           ))}
         </motion.div>
 
-        {/* Layer 3: Foreground Particles */}
+        {/* Layer 3: Foreground Particles - Optimized */}
         <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
+          {[...Array(15)].map((_, i) => (
             <motion.div
               key={`particle-${i}`}
               className="absolute w-1 h-1 bg-white rounded-full"

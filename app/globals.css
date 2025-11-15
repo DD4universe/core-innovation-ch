@@ -27,6 +27,10 @@ body {
     )
     rgb(var(--background-start-rgb));
   overflow-x: hidden;
+  /* Performance optimizations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
 }
 
 @layer utilities {
@@ -51,8 +55,9 @@ body {
   }
   
   .animate-gradient-x {
-    animation: gradient-x 15s ease infinite;
+    animation: gradient-x 20s ease infinite;
     background-size: 200% 200%;
+    will-change: background-position;
   }
   
   @keyframes gradient-x {
@@ -65,7 +70,8 @@ body {
   }
   
   .animate-float-slow {
-    animation: float-slow 8s ease-in-out infinite;
+    animation: float-slow 10s ease-in-out infinite;
+    will-change: transform;
   }
   
   @keyframes float-slow {
@@ -78,7 +84,8 @@ body {
   }
   
   .animate-spin-slow {
-    animation: spin-slow 20s linear infinite;
+    animation: spin-slow 30s linear infinite;
+    will-change: transform;
   }
   
   @keyframes spin-slow {
@@ -184,6 +191,20 @@ body {
     );
     background-size: 1000px 100%;
     animation: shimmer 3s infinite;
+  }
+  
+  /* Performance optimizations */
+  img, video {
+    content-visibility: auto;
+  }
+  
+  /* GPU acceleration for animations */
+  .perspective-1000,
+  .transform-style-3d,
+  [style*="transform"] {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 }
 

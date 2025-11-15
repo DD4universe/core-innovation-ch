@@ -53,12 +53,13 @@ export default function Card3D({ children, className = '' }: Card3DProps) {
       }}
       transition={{
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 200,
+        damping: 25,
       }}
       style={{
         transformStyle: "preserve-3d",
         perspective: 1000,
+        willChange: "transform",
       }}
       className={`relative ${className}`}
     >

@@ -13,12 +13,12 @@ export default function LoadingScreen() {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval)
-          setTimeout(() => setIsLoading(false), 500)
+          setTimeout(() => setIsLoading(false), 200)
           return 100
         }
-        return prev + 10
+        return prev + 20
       })
-    }, 150)
+    }, 80)
 
     return () => clearInterval(interval)
   }, [])
@@ -35,7 +35,7 @@ export default function LoadingScreen() {
           {/* Animated background */}
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-cyan-900/20 animate-gradient-x"></div>
-            {[...Array(50)].map((_, i) => (
+            {[...Array(20)].map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute w-1 h-1 bg-white rounded-full"
