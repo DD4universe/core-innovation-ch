@@ -95,13 +95,25 @@ export default function Products() {
     doc.text(`${formData.address}`, 20, 195)
     doc.text(`${formData.city}, ${formData.state} - ${formData.pincode}`, 20, 203)
 
+      // Payment Instructions - FREE UPI for Indian users
+      doc.setFillColor(34, 197, 94)
+      doc.rect(0, 220, 210, 35, 'F')
+      doc.setTextColor(255, 255, 255)
+      doc.setFontSize(12)
+      doc.setFont('helvetica', 'bold')
+      doc.text('PAYMENT OPTIONS (100% FREE - No Gateway Fees!)', 105, 230, { align: 'center' })
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(10)
+      doc.text('Pay via UPI: Google Pay | PhonePe | Paytm', 105, 238, { align: 'center' })
+      doc.text(`UPI ID: ${process.env.NEXT_PUBLIC_UPI_ID || 'durai@paytm'}`, 105, 246, { align: 'center' })
+
       // Footer
       doc.setFillColor(99, 102, 241)
       doc.rect(0, 270, 210, 27, 'F')
       doc.setTextColor(255, 255, 255)
       doc.setFontSize(9)
-      doc.text('Thank you for your order! We will contact you shortly.', 105, 282, { align: 'center' })
-      doc.text('For any queries, contact us at itsdurai4@gmail.com', 105, 289, { align: 'center' })
+      doc.text('Thank you for your order! Send screenshot after UPI payment.', 105, 282, { align: 'center' })
+      doc.text('For any queries, contact us at itsdurai4@gmail.com or WhatsApp +91 6369704741', 105, 289, { align: 'center' })
 
       return doc
     } catch (error) {
@@ -111,18 +123,23 @@ export default function Products() {
   }
 
   const handleSendViaWhatsApp = () => {
+    const total = parseFloat((selectedProductPrice || '0').replace(/[₹,]/g, '')) * parseInt(formData.quantity || '1')
+    const upiId = process.env.NEXT_PUBLIC_UPI_ID || 'durai@paytm'
+    
     const message = `Hi! I'd like to place an order:\n\n` +
       `Order Number: ${orderNumber}\n` +
       `Product: ${selectedProduct}\n` +
       `Price: ${selectedProductPrice}\n` +
       `Quantity: ${formData.quantity}\n` +
-      `Total: Rs. ${parseFloat((selectedProductPrice || '0').replace(/[₹,]/g, '')) * parseInt(formData.quantity || '1')}\n\n` +
+      `Total: Rs. ${total.toLocaleString('en-IN')}\n\n` +
       `Customer Details:\n` +
       `Name: ${formData.name}\n` +
       `Email: ${formData.email}\n` +
       `Phone: ${formData.phone}\n` +
       `Address: ${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}\n\n` +
-      `I've downloaded the PDF order slip. Please confirm!`
+      `💳 PAYMENT: I'll pay Rs. ${total} via UPI to ${upiId}\n` +
+      `📱 Apps: Google Pay / PhonePe / Paytm (No gateway fees!)\n\n` +
+      `I've downloaded the PDF order slip. Will send payment screenshot after UPI transfer!`
     
     window.open(`https://wa.me/916369704741?text=${encodeURIComponent(message)}`, '_blank')
     setShowSendOptions(false)

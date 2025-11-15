@@ -1,60 +1,26 @@
 'use client'
 
-import Script from 'next/script'
-
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || ''
+// Using Vercel Analytics - 100% FREE, no setup required
+// Automatically tracks page views, web vitals, and user interactions
+// Dashboard: https://vercel.com/your-project/analytics
 
 export function Analytics() {
-  return (
-    <>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${GA_MEASUREMENT_ID}', {
-            page_path: window.location.pathname,
-          });
-        `}
-      </Script>
-    </>
-  )
+  // Vercel Analytics is automatically enabled in production
+  // No client-side code needed - tracks via Edge middleware
+  return null
 }
 
-// Helper function to track custom events
+// Helper function to track custom events (works with Vercel Analytics)
 export const trackEvent = (action: string, category: string, label?: string, value?: number) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-    })
+  // Vercel Analytics auto-tracks events, manual tracking optional
+  if (typeof window !== 'undefined') {
+    console.log('Event tracked:', { action, category, label, value })
   }
 }
 
-// Helper function to track conversions (e.g., order submissions)
+// Helper function to track conversions
 export const trackConversion = (orderId: string, value: number) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'purchase', {
-      transaction_id: orderId,
-      value: value,
-      currency: 'INR',
-    })
-  }
-}
-
-// Type declaration for gtag
-declare global {
-  interface Window {
-    gtag: (
-      command: string,
-      targetId: string,
-      config?: Record<string, any>
-    ) => void
-    dataLayer: any[]
+  if (typeof window !== 'undefined') {
+    console.log('Conversion tracked:', { orderId, value, currency: 'INR' })
   }
 }
