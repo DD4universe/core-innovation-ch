@@ -172,7 +172,7 @@ export default function Hero() {
           className="absolute inset-0"
           style={{ x: x2, y: y2 }}
         >
-          {[...Array(20)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <motion.div
               key={`layer2-${i}`}
               className="absolute rounded-full bg-gradient-to-r from-primary/20 to-accent/20 blur-xl"
@@ -200,7 +200,7 @@ export default function Hero() {
 
         {/* Layer 3: Foreground Particles */}
         <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
+          {[...Array(15)].map((_, i) => (
             <motion.div
               key={`particle-${i}`}
               className="absolute w-1 h-1 bg-white rounded-full"
@@ -226,7 +226,7 @@ export default function Hero() {
 
         {/* Galaxy Animation - Bottom to Top 45%, Left to Right */}
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(8)].map((_, i) => (
+          {[...Array(1)].map((_, i) => (
             <motion.div
               key={`galaxy-${i}`}
               className="absolute"
