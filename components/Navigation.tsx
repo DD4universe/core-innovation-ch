@@ -2,13 +2,13 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { FaWhatsapp, FaFacebookMessenger } from 'react-icons/fa'
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [showContactMenu, setShowContactMenu] = useState(false)
-  const router = useRouter()
   const pathname = usePathname()
 
   const handleWhatsApp = () => {
@@ -49,10 +49,6 @@ export default function Navigation() {
     { name: 'Contact', path: '/contact' },
   ]
 
-  const navigateToPage = (path: string) => {
-    router.push(path)
-  }
-
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -65,37 +61,38 @@ export default function Navigation() {
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            onClick={() => navigateToPage('/')}
-            className="text-2xl font-bold glow cursor-pointer"
-          >
-            DURAI
-          </motion.div>
+          <Link href="/">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="text-2xl font-bold glow cursor-pointer"
+            >
+              DURAI
+            </motion.div>
+          </Link>
 
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item, index) => (
-              <motion.button
-                key={item.path}
-                onClick={() => navigateToPage(item.path)}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.1 }}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors ${
-                  pathname === item.path ? 'text-primary' : 'text-gray-300'
-                }`}
-              >
-                {item.name}
-                {pathname === item.path && (
-                  <motion.div
-                    layoutId="activeSection"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-secondary to-accent"
-                    initial={false}
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </motion.button>
+              <Link key={item.path} href={item.path}>
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.1 }}
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${
+                    pathname === item.path ? 'text-primary' : 'text-gray-300'
+                  }`}
+                >
+                  {item.name}
+                  {pathname === item.path && (
+                    <motion.div
+                      layoutId="activeSection"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-secondary to-accent"
+                      initial={false}
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </motion.div>
+              </Link>
             ))}
           </div>
 
